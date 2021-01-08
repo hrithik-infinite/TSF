@@ -1,0 +1,111 @@
+---
+title: "TSF Task 1"
+author: "Hrithik Agarwal"
+date: "08/01/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Prediction using supervised ML (Linear Regression)
+
+Importing the required libraries
+
+```{r, message= FALSE}
+library(ggplot2)
+library(GGally)
+```
+
+Importing and Reading Data
+
+```{r}
+d <- read.csv('https://raw.githubusercontent.com/AdiPersonalWorks/Random/master/student_scores%20-%20student_scores.csv')
+```
+```{r}
+dim(d)
+head(d)
+```
+
+### Cheacking for missing data
+
+```{r}
+sum(is.na(d))
+```
+
+Thus there is no Missing data.
+
+
+## Plotting the Data
+
+```{r}
+ggplot(data = d,aes(y = Scores , x = Hours)) + geom_point()
+```
+
+From the graph we can observe that there is no future engineering reuired in the data.
+
+## Correlation between the variables
+
+```{r}
+ggpairs(data = d , columns = 1:2)
+
+```
+
+The Correlation is **0.976** which is very significant.
+
+## Training the model
+
+```{r}
+model <- lm(Scores ~ Hours, data = d)
+```
+
+### Summary of Model
+
+```{r}
+summary(model)
+```
+
+Since **Pr(>|t|)** << 1, it indicates that model is highly significant.
+
+### Plotting the regression Line
+
+```{r, message=FALSE}
+ggplot(data = d,aes(y = Scores , x = Hours)) + geom_point()+geom_smooth(method = 'lm', color = 'red')
+
+```
+
+### Prediction on Our Dataset
+
+```{r}
+d2 <- data.frame(d$Hours)
+names(d2)[1]<- 'Hours'
+pred <- predict(model , )
+pred <- as.numeric(pred)
+pred
+```
+
+Comparing the Actual and Predicted Scores.
+
+```{r}
+actual <- as.numeric(d$Scores)
+data.frame(actual,pred)
+```
+
+## Predicting for Hours = 9.25
+
+```{r}
+predict(model, data.frame(Hours = 9.25))
+
+```
+
+### Hence our model Predicts Score of **92.90985**
+
+
+
+
+ 
+
+
